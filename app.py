@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_redis import FlaskRedis
+from flask_cors import CORS
 
 import random
 import string
@@ -9,10 +10,11 @@ REDIS_URL = "redis://:password@localhost:6379/0"
 
 r = FlaskRedis(app)
 from app import r
+CORS(app)
 
 @app.route("/test", methods=["GET"])
 def test():
-    return jsonify([ key.decode("utf-8") for key in r.keys("*")]) # Hey, remember list comprehension?!!
+    return jsonify([ key.decode("utf-8") for key in r.keys("*")])
 
 @app.route("/url/add", methods=["POST"])
 def add_url():
@@ -26,7 +28,7 @@ def add_url():
     r.set(key, url)
     return jsonify(key)
 
-@app.route("/url/get", methods=["GET"])
+@app.route("/url/get", methods=["GET"])[]
 def get_all_keys():
     all_keys = r.keys("*")
     return jsonify([key.decode("utf-8") for key in all_keys])
